@@ -117,7 +117,7 @@ class Interpreter(InterpreterBase):
 
   def _assign(self, tokens):
    if len(tokens) < 2:
-     super().error(ErrorType.SYNTAX_ERROR,"Invalid assignment statement")
+     super().error(ErrorType.SYNTAX_ERROR,"Invalid assignment statement",self.ip)
    vname = tokens[0]
    value_type = self._eval_expression(tokens[1:])
    if not self._is_member_access(vname):
@@ -452,8 +452,8 @@ class Interpreter(InterpreterBase):
     func_info = self._get_function_info(funcname)
     if func_info is None:
       if self._get_variable_value(funcname):
-        super().error(ErrorType.TYPE_ERROR,f"{funcname} is not variable of type {Type.FUNC}")
-      super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function")
+        super().error(ErrorType.TYPE_ERROR,f"{funcname} is not variable of type {Type.FUNC}", self.ip)
+      super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function", self.ip)
 
     return func_info.start_ip
 
