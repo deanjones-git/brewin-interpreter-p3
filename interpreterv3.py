@@ -40,7 +40,7 @@ class Interpreter(InterpreterBase):
     super().__init__(console_output, input)
     self._setup_operations()  # setup all valid binary operations and the types they work on
     self._setup_default_values()  # setup the default values for each type (e.g., bool->False)
-    self.trace_output = True # trace_output
+    self.trace_output = trace_output
 
   # run a program, provided in an array of strings, one string per line of source code
   def run(self, program):
@@ -451,6 +451,8 @@ class Interpreter(InterpreterBase):
   def _find_first_instruction(self, funcname):
     func_info = self._get_function_info(funcname)
     if func_info is None:
+      if self._get_variable_value(funcname):
+        super().error(ErrorType.TYPE_ERROR,f"{funcname} is not variable of type {Type.FUNC}")
       super().error(ErrorType.NAME_ERROR,f"Unable to locate {funcname} function")
 
     return func_info.start_ip
